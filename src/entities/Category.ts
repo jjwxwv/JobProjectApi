@@ -2,8 +2,8 @@ import { Entity, OneToMany } from "typeorm";
 import { Common } from "./utils/Common";
 import { Post } from "./Post";
 
-@Entity()
-export class HiringType extends Common {
-  @OneToMany(() => Post, (post) => post.hiring_type)
+@Entity("categories")
+export class Category extends Common {
+  @OneToMany(() => Post, (post) => post.category)
   posts: Post[];
 }

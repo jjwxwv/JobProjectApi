@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Common } from './utils/Common';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Common } from "./utils/Common";
+import { Post } from "./Post";
 
-@Entity('company')
+@Entity("company")
 export class Company extends Common {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,4 +21,7 @@ export class Company extends Common {
 
   @Column()
   image_url: string;
+
+  @OneToMany(() => Post, (post) => post.company)
+  posts: Post[];
 }

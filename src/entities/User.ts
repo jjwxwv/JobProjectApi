@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Company } from './Company';
 
 @Entity()
 export class User extends BaseEntity {
@@ -9,4 +10,8 @@ export class User extends BaseEntity {
     unique: true,
   })
   email: string;
+
+  @OneToOne(()=>Company)
+  @JoinColumn()
+  company:Company
 }
