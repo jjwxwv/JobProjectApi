@@ -8,7 +8,7 @@ export class Company extends Common {
   id: number;
 
   @Column()
-  company_ts: string;
+  company_name: string;
 
   @Column()
   address: string;

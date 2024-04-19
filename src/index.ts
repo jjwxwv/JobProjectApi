@@ -12,6 +12,9 @@ import { Responsibility } from "./entities/Responsibility";
 import { User } from "./entities/User";
 import { Salary } from "./entities/Salary";
 import dotenv from "dotenv";
+import { postRouter } from "./routes/postRoutes";
+import { companyRouter } from "./routes/companyRoutes";
+import { userRouter } from "./routes/userRoutes";
 dotenv.config();
 
 const app = express();
@@ -54,3 +57,8 @@ const app = express();
     throw new Error("Unable to connect to db");
   }
 })();
+app.use(express.json());
+//Routes
+app.use("/post", postRouter);
+app.use("/company", companyRouter);
+app.use("/user", userRouter);
