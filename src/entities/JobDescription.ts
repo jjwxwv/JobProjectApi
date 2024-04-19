@@ -4,7 +4,7 @@ import { Post } from "./Post";
 
 @Entity()
 export class JobDescription extends Common {
-  @ManyToOne(() => Post, (post) => post.job_description, {
+  @ManyToOne(() => Post, (post) => post.jobDescription, {
     onDelete: "CASCADE",
   })
   @JoinColumn({

@@ -4,6 +4,6 @@ import { Post } from "./Post";
 
 @Entity()
 export class HiringType extends Common {
-  @OneToMany(() => Post, (post) => post.hiring_type)
+  @OneToMany(() => Post, (post) => post.hiringType)
   posts: Post[];
 }

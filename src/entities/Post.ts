@@ -51,7 +51,7 @@ export class Post extends Common {
   @JoinColumn({
     name: "hiring_id",
   })
-  hiring_type: HiringType;
+  hiringType: HiringType;
 
   @ManyToOne(() => Exp, (exp) => exp.posts, {
     onDelete: "CASCADE",
@@ -65,7 +65,7 @@ export class Post extends Common {
   benefit: Benefit[];
 
   @OneToMany(() => JobDescription, (jobDesc) => jobDesc.post)
-  job_description: JobDescription[];
+  jobDescription: JobDescription[];
 
   @OneToMany(() => Responsibility, (responsibility) => responsibility.post)
   responsibility: Responsibility[];

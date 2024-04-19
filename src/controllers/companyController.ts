@@ -1,5 +1,7 @@
-export const getCompanyProfile = async (req, res) => {};
+import { Request, Response } from "express";
 
-export const getCompanyById = async (req, res) => {};
+export const getCompanyProfile = async (req: Request, res: Response) => {};
 
-export const editCompanyProfile = async (req, res) => {};
+export const getCompanyById = async (req: Request, res: Response) => {};
+
+export const editCompanyProfile = async (req: Request, res: Response) => {};
