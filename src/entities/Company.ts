@@ -1,9 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Common } from "./utils/Common";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Post } from "./Post";
 
 @Entity("company")
-export class Company extends Common {
+export class Company extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -61,16 +61,24 @@ export class Post extends Common {
   })
   exp: Exp;
 
-  @OneToMany(() => Benefit, (benefit) => benefit.post)
+  @OneToMany(() => Benefit, (benefit) => benefit.post, {
+    cascade: ["insert", "update"],
+  })
   benefit: Benefit[];
 
-  @OneToMany(() => JobDescription, (jobDesc) => jobDesc.post)
+  @OneToMany(() => JobDescription, (jobDesc) => jobDesc.post, {
+    cascade: ["insert", "update"],
+  })
   jobDescription: JobDescription[];
 
-  @OneToMany(() => Responsibility, (responsibility) => responsibility.post)
+  @OneToMany(() => Responsibility, (responsibility) => responsibility.post, {
+    cascade: ["insert", "update"],
+  })
   responsibility: Responsibility[];
 
-  @OneToMany(() => Qualification, (qualification) => qualification.post)
+  @OneToMany(() => Qualification, (qualification) => qualification.post, {
+    cascade: ["insert", "update"],
+  })
   qualification: Qualification[];
 
   @CreateDateColumn()

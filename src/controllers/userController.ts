@@ -1,2 +1,2 @@
-export const checkCompanyProfile = async (req, res) => {};
-export const addNewCompany = async (req, res) => {};
+export const getCompanyProfile = async (req: Request, res: Response) => {};
+export const addNewCompany = async (req: Request, res: Response) => {};
