@@ -30,6 +30,7 @@ export class Post extends Common {
   company: Company;
 
   @ManyToOne(() => Salary, (salary) => salary.posts, {
+    eager: true,
     onDelete: "CASCADE",
   })
   @JoinColumn({
@@ -38,6 +39,7 @@ export class Post extends Common {
   salary: Salary;
 
   @ManyToOne(() => Category, (category) => category.posts, {
+    eager: true,
     onDelete: "CASCADE",
   })
   @JoinColumn({
@@ -46,6 +48,7 @@ export class Post extends Common {
   category: Category;
 
   @ManyToOne(() => HiringType, (hiring) => hiring.posts, {
+    eager: true,
     onDelete: "CASCADE",
   })
   @JoinColumn({
@@ -54,6 +57,7 @@ export class Post extends Common {
   hiringType: HiringType;
 
   @ManyToOne(() => Exp, (exp) => exp.posts, {
+    eager: true,
     onDelete: "CASCADE",
   })
   @JoinColumn({
@@ -62,21 +66,25 @@ export class Post extends Common {
   exp: Exp;
 
   @OneToMany(() => Benefit, (benefit) => benefit.post, {
+    eager: true,
     cascade: ["insert", "update"],
   })
   benefit: Benefit[];
 
   @OneToMany(() => JobDescription, (jobDesc) => jobDesc.post, {
+    eager: true,
     cascade: ["insert", "update"],
   })
   jobDescription: JobDescription[];
 
   @OneToMany(() => Responsibility, (responsibility) => responsibility.post, {
+    eager: true,
     cascade: ["insert", "update"],
   })
   responsibility: Responsibility[];
 
   @OneToMany(() => Qualification, (qualification) => qualification.post, {
+    eager: true,
     cascade: ["insert", "update"],
   })
   qualification: Qualification[];
