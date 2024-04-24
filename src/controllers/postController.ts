@@ -41,10 +41,8 @@ export const getPosts = async (
 
 export const getPostByPostId = async (req: Request, res: Response) => {
   const { id } = req.params;
-  let query: FindOptionsWhere<Post>;
-  query = { id: Number(id) };
   const post = await Post.findOne({
-    where: query,
+    where: { id: Number(id) },
   });
   return res.json(post);
 };
