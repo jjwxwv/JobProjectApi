@@ -85,32 +85,29 @@ export const addNewPost = async (
   });
   const exp = await Exp.findOneOrFail({ where: { id: expId } });
   const jobDesc = jobDescription.map((desc) => {
-    const jobD = new JobDescription();
-    jobD.title = desc;
+    const jobD = JobDescription.create({ title: desc });
     return jobD;
   });
   const respons = responsibility.map((res) => {
-    const resp = new Responsibility();
-    resp.title = res;
+    const resp = Responsibility.create({ title: res });
     return resp;
   });
   const qualify = qualification.map((qua) => {
-    const qual = new Qualification();
-    qual.title = qua;
+    const qual = Qualification.create({ title: qua });
     return qual;
   });
   const benefits = benefit.map((ben: any) => {
-    const bene = new Benefit();
-    bene.title = ben;
+    const bene = Benefit.create({ title: ben });
     return bene;
   });
-  const post = new Post();
-  post.title = title;
-  post.company = company;
-  post.salary = salary;
-  post.category = category;
-  post.hiringType = hiringType;
-  post.exp = exp;
+  const post = Post.create({
+    title,
+    company,
+    salary,
+    category,
+    hiringType,
+    exp,
+  });
   post.jobDescription = jobDesc;
   post.responsibility = respons;
   post.qualification = qualify;
@@ -137,7 +134,6 @@ export const editPost = async (
     qualification,
     benefit,
   } = req.body;
-  const post = await Post.findOneOrFail({ where: { id: Number(id) } });
   const company = await Company.findOneOrFail({ where: { id: companyId } });
   const salary = await Salary.findOneOrFail({ where: { id: salaryId } });
   const category = await Category.findOneOrFail({ where: { id: categoryId } });
@@ -145,41 +141,40 @@ export const editPost = async (
     where: { id: hiringTypeId },
   });
   const exp = await Exp.findOneOrFail({ where: { id: expId } });
-  const jobDesc = await jobDescription.map(async (desc) => {
-    await JobDescription.update({ post }, { title: desc });
-    const jobD = JobDescription.findOneOrFail({
-      where: { post: { id: Number(id) } },
-    });
-    return jobD;
-  });
-  const respons = responsibility.map(async (res) => {
-    await Responsibility.update({ post }, { title: res });
-    const resp = Responsibility.findOneOrFail({
-      where: { post: { id: Number(id) } },
-    });
-    return resp;
-  });
-  const qualify = qualification.map(async (qua) => {
-    await Qualification.update({ post }, { title: qua });
-    const qual = Qualification.findOneOrFail({
-      where: { post: { id: Number(id) } },
-    });
-    return qual;
-  });
-  const benefits = benefit.map(async (ben: any) => {
-    await Benefit.update({ post }, { title: ben });
-    const bene = Benefit.findOneOrFail({ where: { post: { id: Number(id) } } });
-    return bene;
-  });
   await Post.update(id, {
     title,
-    company,
+    company: company,
     salary,
     category,
     hiringType,
     exp,
-    jobDescription: jobDesc,
   });
-
-  return res.json(post);
+  const post = await Post.findOneOrFail({ where: { id: Number(id) } });
+  await JobDescription.delete({ post: { id: Number(id) } });
+  await Responsibility.delete({ post: { id: Number(id) } });
+  await Qualification.delete({ post: { id: Number(id) } });
+  await Benefit.delete({ post: { id: Number(id) } });
+  const jobDesc = jobDescription.map((desc) => {
+    const jobD = JobDescription.create({ title: desc, post });
+    return jobD;
+  });
+  const respons = responsibility.map((res) => {
+    const resp = Responsibility.create({ title: res, post });
+    return resp;
+  });
+  const qualify = qualification.map((qua) => {
+    const qual = Qualification.create({ title: qua, post });
+    return qual;
+  });
+  const benefits = benefit.map((ben: any) => {
+    const bene = Benefit.create({ title: ben, post });
+    return bene;
+  });
+  await JobDescription.save(jobDesc);
+  await Responsibility.save(respons);
+  await Qualification.save(qualify);
+  await Benefit.save(benefits);
+  const updatedPost = await Post.findOneOrFail({ where: { id: Number(id) } });
+  console.log(updatedPost);
+  return res.json(updatedPost);
 };

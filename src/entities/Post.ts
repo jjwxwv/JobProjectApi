@@ -22,6 +22,7 @@ import { Qualification } from "./Qualification";
 @Entity("post")
 export class Post extends Common {
   @ManyToOne(() => Company, (company) => company.posts, {
+    eager: true,
     onDelete: "CASCADE",
   })
   @JoinColumn({

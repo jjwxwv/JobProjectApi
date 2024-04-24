@@ -36,4 +36,4 @@ app.use(express.json());
 //Routes
 app.use("/post", postRouter);
 app.use("/company", companyRouter);
-// app.use("/user", userRouter);
+app.use("/user", userRouter);

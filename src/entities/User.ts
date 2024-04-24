@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Company } from './Company';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Company } from "./Company";
 
 @Entity()
 export class User extends BaseEntity {
@@ -11,7 +18,7 @@ export class User extends BaseEntity {
   })
   email: string;
 
-  @OneToOne(()=>Company)
+  @OneToOne(() => Company)
   @JoinColumn()
-  company:Company
+  company: Company;
 }
