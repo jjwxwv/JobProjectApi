@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.route("/me").get(getCompanyProfile);
+// router.route("/me").get(getCompanyProfile);
 router.route("/register").post(addNewCompany);
 
 export { router as userRouter };

@@ -3,7 +3,7 @@ import { Company } from "../entities/Company";
 import { User } from "../entities/User";
 
 export const getCompanyProfile = async (req: Request, res: Response) => {};
-type companyType = {
+export type companyType = {
   email: string;
   companyName: string;
   address: string;
