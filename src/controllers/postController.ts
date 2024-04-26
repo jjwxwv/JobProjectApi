@@ -33,8 +33,9 @@ export const getPosts = async (
   query.hiringType = {
     id: hiringTypeId,
   };
+  console.log(query);
   const post = await Post.find({
-    where: query,
+    where: [query.salary, query.category, query.hiringType],
   });
   return res.json(post);
 };
@@ -46,6 +47,7 @@ export const getPostByPostId = async (req: Request, res: Response) => {
   });
   return res.json(post);
 };
+
 type addNewPostType = {
   title: string;
   companyId: number;
@@ -58,7 +60,6 @@ type addNewPostType = {
   qualification: string[];
   benefit: string[];
 };
-
 export const addNewPost = async (
   req: Request<{}, {}, addNewPostType>,
   res: Response
@@ -99,7 +100,7 @@ export const addNewPost = async (
     return bene;
   });
   const post = Post.create({
-    title,
+    title: title.toLowerCase(),
     company,
     salary,
     category,
@@ -140,7 +141,7 @@ export const editPost = async (
   });
   const exp = await Exp.findOneOrFail({ where: { id: expId } });
   await Post.update(id, {
-    title,
+    title: title.toLowerCase(),
     company: company,
     salary,
     category,
