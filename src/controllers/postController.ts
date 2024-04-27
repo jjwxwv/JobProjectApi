@@ -23,19 +23,12 @@ export const getPosts = async (
 ) => {
   const { title, salaryId, categoryId, hiringTypeId } = req.query;
   const query: FindOptionsWhere<Post> | undefined = {};
-  query.title = Like(`%${title?.toLowerCase()}%`);
-  query.salary = {
-    id: salaryId,
-  };
-  query.category = {
-    id: categoryId,
-  };
-  query.hiringType = {
-    id: hiringTypeId,
-  };
-  console.log(query);
+  query.title = title ? Like(`%${title.toLowerCase()}%`) : title;
+  query.salary = { id: salaryId };
+  query.category = { id: categoryId };
+  query.hiringType = { id: hiringTypeId };
   const post = await Post.find({
-    where: [query.salary, query.category, query.hiringType],
+    where: query,
   });
   return res.json(post);
 };
