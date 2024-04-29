@@ -9,7 +9,7 @@ import { JobDescription } from "../entities/JobDescription";
 import { Responsibility } from "../entities/Responsibility";
 import { Qualification } from "../entities/Qualification";
 import { Benefit } from "../entities/Benefit";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, ILike } from "typeorm";
 
 type getPostsType = {
   title: string | undefined;
@@ -23,7 +23,7 @@ export const getPosts = async (
 ) => {
   const { title, salaryId, categoryId, hiringTypeId } = req.query;
   const query: FindOptionsWhere<Post> | undefined = {};
-  query.title = title ? Like(`%${title.toLowerCase()}%`) : title;
+  query.title = title ? ILike(`%${title.toLowerCase()}%`) : title;
   query.salary = { id: salaryId };
   query.category = { id: categoryId };
   query.hiringType = { id: hiringTypeId };
