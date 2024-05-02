@@ -30,7 +30,31 @@ export const getPosts = async (
   const post = await Post.find({
     where: query,
   });
-  return res.json(post);
+  const response = post.map((cur) => {
+    const { company_name, address, tel, email, image_url } = cur.company;
+    const benefit = cur.benefit.map((value) => value.title);
+    const jobDescription = cur.jobDescription.map((value) => value.title);
+    const responsibility = cur.responsibility.map((value) => value.title);
+    const qualification = cur.qualification.map((value) => value.title);
+    return {
+      id: cur.id,
+      title: cur.title,
+      companyName: company_name,
+      salary: cur.salary.title,
+      address,
+      tel,
+      email,
+      image_url,
+      category: cur.category.title,
+      hiringType: cur.hiringType.title,
+      exp: cur.exp.title,
+      benefit,
+      jobDescription,
+      responsibility,
+      qualification,
+    };
+  });
+  return res.json(response);
 };
 
 export const getPostByPostId = async (req: Request, res: Response) => {

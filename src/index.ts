@@ -4,9 +4,13 @@ import dotenv from "dotenv";
 import { postRouter } from "./routes/postRoutes";
 import { companyRouter } from "./routes/companyRoutes";
 import { userRouter } from "./routes/userRoutes";
+import { categoryRouter } from "./routes/categoryRoute";
+import { hiringRouter } from "./routes/hiringRoute";
+import { salaryRouter } from "./routes/salaryRoute";
 dotenv.config();
 
 const app = express();
+const cors = require("cors");
 
 const appDataSource = new DataSource({
   type: "postgres",
@@ -23,17 +27,21 @@ appDataSource
   .initialize()
   .then(() => {
     console.log("Connected to Postgres");
-    app.use(express.json());
-    app.listen(8080, () => {
-      console.log("Now running on port 8080");
-    });
   })
   .catch((error) => {
     console.error(error);
     throw new Error("Unable to connect to db");
   });
+app.use(cors());
 app.use(express.json());
 //Routes
 app.use("/post", postRouter);
 app.use("/company", companyRouter);
 app.use("/user", userRouter);
+app.use("/category", categoryRouter);
+app.use("/hiring", hiringRouter);
+app.use("/salary", salaryRouter);
+
+app.listen(8080, () => {
+  console.log("Now running on port 8080");
+});
