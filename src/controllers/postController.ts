@@ -32,13 +32,14 @@ export const getPosts = async (
   });
   const response = post.map((cur) => {
     const { company_name, address, tel, email, image_url } = cur.company;
-    const benefit = cur.benefit.map((value) => value.title);
-    const jobDescription = cur.jobDescription.map((value) => value.title);
-    const responsibility = cur.responsibility.map((value) => value.title);
-    const qualification = cur.qualification.map((value) => value.title);
+    const benefit = cur.benefit.map((value) => value);
+    const jobDescription = cur.jobDescription.map((value) => value);
+    const responsibility = cur.responsibility.map((value) => value);
+    const qualification = cur.qualification.map((value) => value);
     return {
       id: cur.id,
       title: cur.title,
+      updated_at: cur.updated_at,
       companyName: company_name,
       salary: cur.salary.title,
       address,
@@ -59,10 +60,33 @@ export const getPosts = async (
 
 export const getPostByPostId = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const post = await Post.findOne({
+  const post = await Post.findOneOrFail({
     where: { id: Number(id) },
   });
-  return res.json(post);
+  const { company_name, address, tel, email, image_url } = post.company;
+  const benefit = post.benefit.map((value) => value);
+  const jobDescription = post.jobDescription.map((value) => value);
+  const responsibility = post.responsibility.map((value) => value);
+  const qualification = post.qualification.map((value) => value);
+  const response = {
+    id: post.id,
+    title: post.title,
+    updated_at: post.updated_at,
+    companyName: company_name,
+    salary: post.salary.title,
+    address,
+    tel,
+    email,
+    image_url,
+    category: post.category.title,
+    hiringType: post.hiringType.title,
+    exp: post.exp.title,
+    benefit,
+    jobDescription,
+    responsibility,
+    qualification,
+  };
+  return res.json(response);
 };
 
 type addNewPostType = {
