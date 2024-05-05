@@ -7,6 +7,6 @@ import {
 } from "../controllers/postController";
 const router = express.Router();
 
-router.route("/").get(getPosts).post(addNewPost);
+router.route("").get(getPosts).post(addNewPost);
 router.route("/:id").get(getPostByPostId).put(editPost);
 export { router as postRouter };
