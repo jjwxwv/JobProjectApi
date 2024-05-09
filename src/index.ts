@@ -7,6 +7,7 @@ import { userRouter } from "./routes/userRoutes";
 import { categoryRouter } from "./routes/categoryRoute";
 import { hiringRouter } from "./routes/hiringRoute";
 import { salaryRouter } from "./routes/salaryRoute";
+import { expRouter } from "./routes/expRoute";
 dotenv.config();
 
 const app = express();
@@ -41,6 +42,7 @@ app.use("/user", userRouter);
 app.use("/category", categoryRouter);
 app.use("/hiring", hiringRouter);
 app.use("/salary", salaryRouter);
+app.use("/exp", expRouter);
 
 app.listen(8080, () => {
   console.log("Now running on port 8080");

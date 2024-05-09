@@ -16,75 +16,156 @@ type getPostsType = {
   salaryId: number | undefined;
   categoryId: number | undefined;
   hiringTypeId: number | undefined;
+  page: number;
+  perPage?: number;
+  companyId: number | undefined;
+  expId: number | undefined;
 };
 export const getPosts = async (
   req: Request<{}, {}, {}, getPostsType>,
   res: Response
 ) => {
-  const { title, salaryId, categoryId, hiringTypeId } = req.query;
+  const {
+    title,
+    salaryId,
+    categoryId,
+    hiringTypeId,
+    companyId,
+    expId,
+    page = 1,
+    perPage = 4,
+  } = req.query;
   const query: FindOptionsWhere<Post> | undefined = {};
   query.title = title ? ILike(`%${title.toLowerCase()}%`) : title;
   query.salary = { id: salaryId };
   query.category = { id: categoryId };
   query.hiringType = { id: hiringTypeId };
-  const post = await Post.find({
+  query.company = { id: companyId };
+  query.exp = { id: expId };
+  const [post, totalPost] = await Post.findAndCount({
     where: query,
+    take: perPage,
+    skip: (page - 1) * perPage,
+    select: {
+      id: true,
+      title: true,
+      company: {
+        image_url: true,
+        company_name: true,
+        address: true,
+      },
+      responsibility: true,
+      category: {
+        title: true,
+      },
+      salary: {
+        title: true,
+      },
+      updated_at: true,
+    },
+    relations: {
+      company: true,
+      responsibility: true,
+      category: true,
+      salary: true,
+    },
   });
-  const response = post.map((cur) => {
-    const { company_name, address, tel, email, image_url } = cur.company;
-    const benefit = cur.benefit.map((value) => value);
-    const jobDescription = cur.jobDescription.map((value) => value);
-    const responsibility = cur.responsibility.map((value) => value);
-    const qualification = cur.qualification.map((value) => value);
+  // const response = post.map((cur) => {
+  //   const { company_name, address, image_url } = cur.company;
+  //   const responsibility = cur.responsibility;
+  //   return {
+  //     id: cur.id,
+  //     image_url,
+  //     title: cur.title,
+  //     companyName: company_name,
+  //     address,
+  //     category: cur.category.title,
+  //     salary: cur.salary.title,
+  //     responsibility,
+  //     updatedAt: cur.updated_at,
+  //   };
+  // });
+  const response = post.map((value) => {
     return {
-      id: cur.id,
-      title: cur.title,
-      updated_at: cur.updated_at,
-      companyName: company_name,
-      salary: cur.salary.title,
-      address,
-      tel,
-      email,
-      image_url,
-      category: cur.category.title,
-      hiringType: cur.hiringType.title,
-      exp: cur.exp.title,
-      benefit,
-      jobDescription,
-      responsibility,
-      qualification,
+      id: value.id,
+      image_url: value.company.image_url,
+      title: value.title,
+      companyName: value.company.company_name,
+      address: value.company.address,
+      category: value.category.title,
+      salary: value.salary.title,
+      updatedAt: value.updated_at,
+      responsibility: value.responsibility,
     };
   });
-  return res.json(response);
+  return res.json({
+    page,
+    perPage,
+    totalPages: Math.ceil(totalPost / perPage),
+    totalPost,
+    post: response,
+  });
 };
 
 export const getPostByPostId = async (req: Request, res: Response) => {
   const { id } = req.params;
   const post = await Post.findOneOrFail({
     where: { id: Number(id) },
+    select: {
+      id: true,
+      title: true,
+      company: {
+        id: true,
+        company_name: true,
+        email: true,
+        tel: true,
+        address: true,
+        image_url: true,
+      },
+      category: {
+        title: true,
+      },
+      hiringType: {
+        title: true,
+      },
+      salary: {
+        title: true,
+      },
+      exp: {
+        title: true,
+      },
+      benefit: true,
+      responsibility: true,
+      qualification: true,
+      updated_at: true,
+    },
+    relations: {
+      company: true,
+      responsibility: true,
+      category: true,
+      hiringType: true,
+      salary: true,
+      exp: true,
+      benefit: true,
+      qualification: true,
+    },
   });
-  const { company_name, address, tel, email, image_url } = post.company;
-  const benefit = post.benefit.map((value) => value);
-  const jobDescription = post.jobDescription.map((value) => value);
-  const responsibility = post.responsibility.map((value) => value);
-  const qualification = post.qualification.map((value) => value);
   const response = {
-    id: post.id,
+    image_url: post.company.image_url,
     title: post.title,
-    updated_at: post.updated_at,
-    companyName: company_name,
-    salary: post.salary.title,
-    address,
-    tel,
-    email,
-    image_url,
+    companyName: post.company.company_name,
+    companyId: post.company.id,
+    email: post.company.email,
+    tel: post.company.tel,
+    updatedAt: post.updated_at,
+    address: post.company.address,
     category: post.category.title,
     hiringType: post.hiringType.title,
+    salary: post.salary.title,
     exp: post.exp.title,
-    benefit,
-    jobDescription,
-    responsibility,
-    qualification,
+    benefit: post.benefit,
+    responsibility: post.responsibility,
+    qualification: post.qualification,
   };
   return res.json(response);
 };
@@ -141,7 +222,7 @@ export const addNewPost = async (
     return bene;
   });
   const post = Post.create({
-    title: title.toLowerCase(),
+    title: title,
     company,
     salary,
     category,

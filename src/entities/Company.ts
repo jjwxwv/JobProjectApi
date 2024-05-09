@@ -27,6 +27,9 @@ export class Company extends BaseEntity {
   @Column()
   image_url: string;
 
+  @Column({ nullable: true })
+  companyDescription: string;
+
   @OneToMany(() => Post, (post) => post.company)
   posts: Post[];
 }
