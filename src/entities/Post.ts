@@ -33,7 +33,7 @@ export class Post extends Common {
     onDelete: "CASCADE",
   })
   @JoinColumn({
-    name: "saraly_id",
+    name: "salary_id",
   })
   salary: Salary;
 
@@ -87,3 +87,11 @@ export class Post extends Common {
   @UpdateDateColumn()
   updated_at: Date;
 }
+
+// .env
+// DB_USERNAME = jjwxwv
+// DB_PASSWORD = 0941656428
+// DB_HOST = jobgg.crom2me64ovq.ap-southeast-2.rds.amazonaws.com
+// DB_PORT = 5432
+// # DB_NAME = job
+// NODE_TLS_REJECT_UNAUTHORIZED=0
